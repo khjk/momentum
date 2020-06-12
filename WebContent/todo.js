@@ -3,8 +3,18 @@ const toDoForm = document.querySelector(".js-toDoForm"),
 	toDoList = document.querySelector(".js-toDoList");
 
 const TODOS_LS = "toDos";
-const toDos = [];
+let toDos = [];
 
+function deleteToDo(event){
+	const btn = event.target;
+	const li = btn.parentNode;
+	toDoList.removeChild(li);
+	const cleanToDos = toDos.filter(function(toDo){
+		return toDo.id !== parseInt(li.id); //새로운 배열생성
+	});
+	toDos = cleanToDos;
+	saveToDos();
+}
 //로컬스토리지는 string만 사용가능 -> JSON.stringify
 function saveToDos(){
 	localStorage.setItem(TODOS_LS, JSON.stringify(toDos));
@@ -14,6 +24,7 @@ function paintToDo(text){
 	const li = document.createElement("li"); 
 	const delBtn = document.createElement("button");
 	delBtn.innerHTML = "❌";
+	delBtn.addEventListener("click",deleteToDo);
 	const span = document.createElement("span");
 	const newId = toDos.length + 1;
 	span.innerText = text;
